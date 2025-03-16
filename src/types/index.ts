@@ -104,3 +104,11 @@ export interface Performance {
     percentage: number;
   };
 }
+
+export interface WorkDay {
+  startTime: string;
+  endTime?: string;
+  date: string;
+  officerId: string;
+  isActive: boolean;
+}

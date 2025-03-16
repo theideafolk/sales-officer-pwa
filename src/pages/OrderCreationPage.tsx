@@ -178,7 +178,7 @@ const OrderCreationPage: React.FC<OrderCreationPageProps> = ({ currentLanguage }
   }
   
   return (
-    <div className="pb-24">
+    <div className="pb-28">
       {/* Header */}
       <div className="bg-purple-700 text-white p-4">
         <div className="flex items-center mb-2">
@@ -195,8 +195,8 @@ const OrderCreationPage: React.FC<OrderCreationPageProps> = ({ currentLanguage }
         </div>
       </div>
       
-      {/* Order Summary - Sticky at the bottom */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
+      {/* Order Summary - Now non-sticky and part of the main content flow */}
+      <div className="bg-white border-t border-gray-200 p-4 mb-4 sticky top-0 z-10 shadow-md">
         <div className="flex justify-between items-center mb-2">
           <span className="font-medium">
             {isHindi ? 'उत्पाद' : 'Products'}: {orderItems.length}
@@ -238,7 +238,7 @@ const OrderCreationPage: React.FC<OrderCreationPageProps> = ({ currentLanguage }
       </div>
       
       {/* Main Content */}
-      <div className="px-4 pt-4">
+      <div className="px-4">
         {/* Search Bar */}
         <div className="relative mb-6">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -332,7 +332,7 @@ const OrderCreationPage: React.FC<OrderCreationPageProps> = ({ currentLanguage }
         </div>
         
         {/* Products Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-24">
+        <div className="grid grid-cols-2 gap-3 mb-4">
           {filteredProducts.map(product => {
             const quantity = getQuantity(product.id);
             const hasScheme = hasApplicableScheme(product.id);

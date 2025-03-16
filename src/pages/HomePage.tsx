@@ -1,7 +1,8 @@
-import React from 'react';
-import { Calendar, Store, ShoppingBag, BarChart2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Store, ShoppingBag, BarChart2, Play, Store as Stop } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '../components/ProgressBar';
+import ConfirmationDialog from '../components/ConfirmationDialog';
 import { dailyTarget } from '../data/dummy';
 
 interface HomePageProps {
@@ -12,13 +13,40 @@ const HomePage: React.FC<HomePageProps> = ({ currentLanguage }) => {
   const navigate = useNavigate();
   const isHindi = currentLanguage === 'hi';
   
+  // State for tracking day start/end
+  const [dayStarted, setDayStarted] = useState<boolean>(false);
+  const [startTime, setStartTime] = useState<string | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  
+  // Handle start day action
+  const handleStartDay = () => {
+    if (!dayStarted) {
+      // Start the day
+      const now = new Date();
+      setStartTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setDayStarted(true);
+    } else {
+      // Show confirmation before ending the day
+      setShowConfirmation(true);
+    }
+  };
+  
+  // Handle end day confirmation
+  const handleEndDay = () => {
+    setDayStarted(false);
+    setStartTime(null);
+    // In a real app, we would record the end time and store the day's activity
+  };
+  
   // Main action buttons
   const actions = [
     { 
-      icon: <Calendar size={28} />, 
-      title: isHindi ? 'दिन शुरू करें' : 'Start Day', 
-      onClick: () => console.log('Start day clicked'),
-      color: 'bg-green-600'
+      icon: dayStarted ? <Stop size={28} /> : <Play size={28} />, 
+      title: dayStarted 
+        ? (isHindi ? 'दिन समाप्त करें' : 'End Day')
+        : (isHindi ? 'दिन शुरू करें' : 'Start Day'), 
+      onClick: handleStartDay,
+      color: dayStarted ? 'bg-amber-600' : 'bg-green-600'
     },
     { 
       icon: <Store size={28} />, 
@@ -42,6 +70,20 @@ const HomePage: React.FC<HomePageProps> = ({ currentLanguage }) => {
   
   return (
     <div className="pb-20 pt-4 px-4">
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={handleEndDay}
+        title={isHindi ? 'दिन समाप्त करें?' : 'End Day?'}
+        message={isHindi 
+          ? 'क्या आप सुनिश्चित हैं कि आप अपना कार्य दिवस समाप्त करना चाहते हैं? यह आपके दैनिक गतिविधि को बंद कर देगा।' 
+          : 'Are you sure you want to end your work day? This will close your daily activity.'}
+        confirmText={isHindi ? 'हाँ, दिन समाप्त करें' : 'Yes, End Day'}
+        cancelText={isHindi ? 'नहीं, जारी रखें' : 'No, Continue'}
+        currentLanguage={currentLanguage}
+      />
+      
       {/* Welcome Section */}
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-gray-800">
@@ -55,6 +97,28 @@ const HomePage: React.FC<HomePageProps> = ({ currentLanguage }) => {
             : 'Get ready for a productive day.'}
         </p>
       </div>
+      
+      {/* Day Status - Show when day is started */}
+      {dayStarted && (
+        <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="font-semibold text-green-600">
+                {isHindi ? 'कार्य दिवस सक्रिय' : 'Work Day Active'}
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                {isHindi ? 'शुरू किया गया' : 'Started at'}: {startTime}
+              </p>
+            </div>
+            <div className="flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full">
+              <Calendar size={16} className="mr-1" />
+              <span className="text-sm font-medium">
+                {isHindi ? 'आज सक्रिय' : 'Active Today'}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Daily Target Card */}
       <div className="bg-white rounded-lg shadow-md p-4 mb-6">
