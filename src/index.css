@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #6d28d9;
+  --primary-dark: #5b21b6;
+  --secondary: #f59e0b;
+  --secondary-dark: #d97706;
+  --light: #f3f4f6;
+  --dark: #1f2937;
+  --danger: #ef4444;
+  --success: #10b981;
+}
+
+body {
+  @apply bg-gray-100 text-gray-800 font-sans;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.btn {
+  @apply rounded-lg px-4 py-2 font-medium transition-colors duration-200 text-white text-center flex items-center justify-center gap-2;
+}
+
+.btn-primary {
+  @apply bg-purple-700 hover:bg-purple-800;
+}
+
+.btn-secondary {
+  @apply bg-amber-500 hover:bg-amber-600;
+}
+
+.btn-success {
+  @apply bg-emerald-600 hover:bg-emerald-700;
+}
+
+.btn-danger {
+  @apply bg-red-500 hover:bg-red-600;
+}
+
+.input-field {
+  @apply rounded-lg border border-gray-300 px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md p-4;
+}
+
+.progress-bar {
+  @apply h-4 rounded-full bg-gray-200 overflow-hidden;
+}
+
+.progress-fill {
+  @apply h-full rounded-full transition-all duration-300 ease-in-out;
+}
+
+/* For scrollbar customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
